@@ -11,6 +11,7 @@ game::game() :
 		throw std::exception("YOU DONE GOOFED");
 	}
 	setupShapes();
+	
 }
 
 game::~game()
@@ -50,12 +51,29 @@ void game::processEvents()
 
 		if (sf::Event::KeyReleased == nextEvent.type)
 		{
+		
 			if (nextEvent.key.code == sf::Keyboard::Left)
 			{
-				m_circle.setPosition(m_circle.getPosition().x - 3, m_circle.getPosition().y);
-				
+				if (myClient.Identify == "0")
+				{
+					m_circle.setPosition(m_circle.getPosition().x - 3, m_circle.getPosition().y);
+				}
+				if (myClient.Identify == "1")
+				{
+					m_circle2.setPosition(m_circle2.getPosition().x - 3, m_circle2.getPosition().y);
+				}
 			}
-
+			if (nextEvent.key.code == sf::Keyboard::Right)
+			{
+				if (myClient.Identify == "0")
+				{
+				     m_circle.setPosition(m_circle.getPosition().x + 10, m_circle.getPosition().y);
+				}
+				if (myClient.Identify == "1")
+				{
+					m_circle2.setPosition(m_circle2.getPosition().x + 10, m_circle2.getPosition().y);
+				}
+			}
 		}
 	}
 }
@@ -66,6 +84,29 @@ void game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	if (myClient.Identify == "0")
+	{
+		returnPos();
+	}
+	else
+	{
+		returnPos2();
+	}
+    uqholder = myClient.holder;
+	data = splitString(uqholder,',');
+	
+	for (std::string a : data)
+	{
+		std::cout << a << std::endl ;
+	}
+	if (myClient.Identify == "1")
+	{
+		m_circle.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
+	}
+	else
+	{
+		m_circle2.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
+	}
 }
 
 void game::render()
@@ -73,6 +114,7 @@ void game::render()
 	m_window.clear();
 
 	m_window.draw(m_circle);
+	m_window.draw(m_circle2);
 
 	m_window.display();
 }
@@ -82,9 +124,48 @@ void game::setupShapes()
 	m_circle.setFillColor(sf::Color::Red);
 	m_circle.setRadius(30.0f);
 	m_circle.setPosition(400.0f, 300.0f);
+
+	m_circle2.setFillColor(sf::Color::Yellow);
+	m_circle2.setRadius(30.0f);
+	m_circle2.setPosition(200.0f, 150.0f);
 }
 
-std::string game::returnPos()
+void game::returnPos()
 {
-	return std::to_string(m_circle.getPosition().x) + " " + std::to_string(m_circle.getPosition().y);
+	std::string s;
+
+	s += std::to_string(static_cast<int>(m_circle.getPosition().x));
+	s += ",";
+	s += std::to_string(static_cast<int>(m_circle.getPosition().y));
+
+	myClient.SendString(s);
+}
+void game::returnPos2()
+{
+	std::string s;
+
+	s += std::to_string(static_cast<int>(m_circle2.getPosition().x));
+	s += ",";
+	s += std::to_string(static_cast<int>(m_circle2.getPosition().y));
+
+	myClient.SendString(s);
+}
+void game::returnY1()
+{
+	myClient.SendString(std::to_string(m_circle.getPosition().y));
+}
+void game::returnY2()
+{
+	myClient.SendString(std::to_string(m_circle2.getPosition().y));
+}
+std::vector<std::string> game::splitString(const std::string& s, char delimiter)
+{
+	std::vector<std::string> splits;
+	std::string split;
+	std::istringstream ss(s);
+	while (std::getline(ss, split, delimiter))
+	{
+		splits.push_back(split);
+	}
+	return splits;
 }

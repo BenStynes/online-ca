@@ -5,7 +5,7 @@
 #include "PacketManager.h" //for PacketManager class
 #include <vector> //for std::vector
 #include <shared_mutex> //for shared_mutex
-
+#include "PacketStructs.h"
 class Connection
 {
 public:
@@ -18,6 +18,8 @@ public:
 	FileTransferData m_file; //Object that contains information about our file that is being sent to the client from this server
 	PacketManager m_pm; //Packet Manager for outgoing data for this connection
 	int m_ID = 0;
+	
+
 };
 
 class Server

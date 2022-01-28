@@ -22,10 +22,13 @@ bool Server::ProcessPacket(std::shared_ptr<Connection> connection, PacketType pa
 			{
 				if (conn == connection) //If connection is the user who sent the message...
 					continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
+
 				conn->m_pm.Append(msgPacket);
+
+				
 			}
 		}
-		std::cout << "Processed chat message packet from user ID: " << connection->m_ID << std::endl;
+		//std::cout << "Processed chat message packet from user ID: " << connection->m_ID << std::endl;
 		break;
 	}
 	case PacketType::FileTransferRequestFile:

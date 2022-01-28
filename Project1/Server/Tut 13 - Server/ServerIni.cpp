@@ -60,6 +60,7 @@ bool Server::ListenForNewConnection()
 		std::thread CHT(ClientHandlerThread, std::ref(*this), newConnection);
 		CHT.detach();
 		m_threads.push_back(&CHT);
+		newConnection->m_pm.Append(PS::ChatMessage("i" +std::to_string(newConnection->m_ID)).toPacket());
 		return true;
 	}
 }

@@ -59,3 +59,5 @@ bool Client::GetString(std::string & str)
 	str.resize(bufferlength); //resize string to fit message
 	return recvall(&str[0], bufferlength);
 }
+
+

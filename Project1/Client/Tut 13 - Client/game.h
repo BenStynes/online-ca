@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "Client.h"
 #include <iostream>
+#include <sstream>
+#include "PacketStructs.h"
 class game
 {
 public:
@@ -12,7 +14,12 @@ public:
 	~game();
 
 	void run();
-	std::string returnPos();
+	void returnPos();
+	void returnPos2();
+	void returnY1();
+	void returnY2();
+	std::vector<std::string> splitString(const std::string& s, char delimiter);
+	
 private:
 
 	void processEvents();
@@ -23,9 +30,12 @@ private:
 
 	sf::RenderWindow m_window;
 	bool m_exitgame;
-
+	std::vector<std::string> data;
 	sf::CircleShape m_circle;
+	sf::CircleShape m_circle2;
+	std::string uqholder;
 	Client myClient;
+	int identity;
 };
 
 #endif // !GAME

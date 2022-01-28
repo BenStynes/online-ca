@@ -10,7 +10,7 @@ namespace PS
 	std::shared_ptr<Packet> ChatMessage::toPacket()
 	{
 		std::shared_ptr<Packet> p = std::make_shared<Packet>();
-		p->Append(PacketType::ChatMessage);
+		p->Append(PacketType::ChatMessage);  
 		p->Append(m_message.size());
 		p->Append(m_message);
 		return p;
