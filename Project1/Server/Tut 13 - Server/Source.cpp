@@ -7,7 +7,7 @@ Date: 02/26/2017
 
 int main()
 {
-	Server MyServer(1111, false); //Create server on port 1111, false=do not loopback to localhost (others can connect)
+	Server MyServer(1111, true); //Create server on port 1111, false=do not loopback to localhost (others can connect)
 	while (true)
 	{
 		MyServer.ListenForNewConnection(); //Accept new connection (if someones trying to connect)

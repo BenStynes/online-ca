@@ -2,7 +2,7 @@
 
 game::game() :
 	m_window{ sf::VideoMode{ 800u, 600u, 32u }, "Basic game" },
-	m_exitgame{ false },myClient("127.0.0.1", 1111)
+	m_exitgame{ false },myClient("149.153.106.176", 1111)
 {
 	if (!myClient.Connect()) //If client fails to connect...
 	{
