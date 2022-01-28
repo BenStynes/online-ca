@@ -27,7 +27,8 @@ private:
 	void render();
 
 	void setupShapes();
-
+	bool gameOver = false;
+	sf::Clock timer;
 	sf::RenderWindow m_window;
 	bool m_exitgame;
 	std::vector<std::string> data;
@@ -36,6 +37,8 @@ private:
 	std::string uqholder;
 	Client myClient;
 	int identity;
+	sf::Text goodMorning;
+	sf::Font evening;
 };
 
 #endif // !GAME

@@ -1,7 +1,7 @@
 #include "game.h"
 
 game::game() :
-	m_window{ sf::VideoMode{ 800u, 600u, 32u }, "Basic game" },
+	m_window{ sf::VideoMode{ 1800u, 1200u, 32u }, "Basic game" },
 	m_exitgame{ false },myClient("149.153.106.176", 1111)
 {
 	if (!myClient.Connect()) //If client fails to connect...
@@ -10,6 +10,7 @@ game::game() :
 		system("pause");
 		throw std::exception("YOU DONE GOOFED");
 	}
+	timer.restart();
 	setupShapes();
 	
 }
@@ -49,29 +50,53 @@ void game::processEvents()
 			m_window.close();
 		}
 
-		if (sf::Event::KeyReleased == nextEvent.type)
+		if (sf::Event::KeyPressed == nextEvent.type)
 		{
-		
-			if (nextEvent.key.code == sf::Keyboard::Left)
+			if (!gameOver)
 			{
-				if (myClient.Identify == "0")
+				if (nextEvent.key.code == sf::Keyboard::Left)
 				{
-					m_circle.setPosition(m_circle.getPosition().x - 3, m_circle.getPosition().y);
+					if (myClient.Identify == "0")
+					{
+						m_circle.setPosition(m_circle.getPosition().x - 10, m_circle.getPosition().y);
+					}
+					if (myClient.Identify == "1")
+					{
+						m_circle2.setPosition(m_circle2.getPosition().x - 10, m_circle2.getPosition().y);
+					}
 				}
-				if (myClient.Identify == "1")
+				if (nextEvent.key.code == sf::Keyboard::Right)
 				{
-					m_circle2.setPosition(m_circle2.getPosition().x - 3, m_circle2.getPosition().y);
+					if (myClient.Identify == "0")
+					{
+						m_circle.setPosition(m_circle.getPosition().x + 10, m_circle.getPosition().y);
+					}
+					if (myClient.Identify == "1")
+					{
+						m_circle2.setPosition(m_circle2.getPosition().x + 10, m_circle2.getPosition().y);
+					}
 				}
-			}
-			if (nextEvent.key.code == sf::Keyboard::Right)
-			{
-				if (myClient.Identify == "0")
+				if (nextEvent.key.code == sf::Keyboard::Down)
 				{
-				     m_circle.setPosition(m_circle.getPosition().x + 10, m_circle.getPosition().y);
+					if (myClient.Identify == "0")
+					{
+						m_circle.setPosition(m_circle.getPosition().x, m_circle.getPosition().y + 10);
+					}
+					if (myClient.Identify == "1")
+					{
+						m_circle2.setPosition(m_circle2.getPosition().x, m_circle2.getPosition().y + 10);
+					}
 				}
-				if (myClient.Identify == "1")
+				if (nextEvent.key.code == sf::Keyboard::Up)
 				{
-					m_circle2.setPosition(m_circle2.getPosition().x + 10, m_circle2.getPosition().y);
+					if (myClient.Identify == "0")
+					{
+						m_circle.setPosition(m_circle.getPosition().x, m_circle.getPosition().y - 10);
+					}
+					if (myClient.Identify == "1")
+					{
+						m_circle2.setPosition(m_circle2.getPosition().x, m_circle2.getPosition().y - 10);
+					}
 				}
 			}
 		}
@@ -107,6 +132,18 @@ void game::update(sf::Time t_deltaTime)
 	{
 		m_circle2.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
 	}
+
+	if (!gameOver && m_circle.getGlobalBounds().intersects(m_circle2.getGlobalBounds()))
+	{
+		gameOver = true;
+		goodMorning.setString("Yellow Survived for " + std::to_string(timer.getElapsedTime().asSeconds()) + "seconds!");
+
+	}
+	if (gameOver)
+	{
+		goodMorning.setPosition(700, 600);
+
+	}
 }
 
 void game::render()
@@ -115,7 +152,10 @@ void game::render()
 
 	m_window.draw(m_circle);
 	m_window.draw(m_circle2);
-
+	if (gameOver)
+	{
+		m_window.draw(goodMorning);
+	}
 	m_window.display();
 }
 
@@ -128,6 +168,12 @@ void game::setupShapes()
 	m_circle2.setFillColor(sf::Color::Yellow);
 	m_circle2.setRadius(30.0f);
 	m_circle2.setPosition(200.0f, 150.0f);
+	
+	evening.loadFromFile("C:/Windows/Fonts/comic.ttf");
+	goodMorning.setFont(evening);
+	goodMorning.setCharacterSize(44);
+	goodMorning.setFillColor(sf::Color::Yellow);
+
 }
 
 void game::returnPos()
