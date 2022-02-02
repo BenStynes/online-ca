@@ -23,14 +23,7 @@ bool Client::ProcessPacketType(PacketType packetType)
 			if (Message.at(0) == 'i')
 			{
 				Identify = Message.at(1);
-				if (Identify == "0")
-				{
-					holder = "300,400";
-				}
-				if (Identify == "1")
-				{
-					holder = "200,100";
-				}
+				
 		    }
 		}//	std::cout << Message << std::endl; //Display the message to the user
 		else

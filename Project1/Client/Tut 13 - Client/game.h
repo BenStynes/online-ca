@@ -31,6 +31,7 @@ private:
 	sf::Clock timer;
 	sf::RenderWindow m_window;
 	bool m_exitgame;
+	bool start = false;
 	std::vector<std::string> data;
 	sf::CircleShape m_circle;
 	sf::CircleShape m_circle2;

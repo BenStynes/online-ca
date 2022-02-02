@@ -10,8 +10,11 @@ game::game() :
 		system("pause");
 		throw std::exception("YOU DONE GOOFED");
 	}
-	timer.restart();
+
+
 	setupShapes();
+	timer.restart();
+	
 	
 }
 
@@ -98,6 +101,8 @@ void game::processEvents()
 						m_circle2.setPosition(m_circle2.getPosition().x, m_circle2.getPosition().y - 10);
 					}
 				}
+
+
 			}
 		}
 	}
@@ -111,11 +116,13 @@ void game::update(sf::Time t_deltaTime)
 	}
 	if (myClient.Identify == "0")
 	{
+		
 		returnPos();
 	}
 	else
 	{
 		returnPos2();
+		
 	}
     uqholder = myClient.holder;
 	data = splitString(uqholder,',');
@@ -124,19 +131,24 @@ void game::update(sf::Time t_deltaTime)
 	{
 		std::cout << a << std::endl ;
 	}
-	if (myClient.Identify == "1")
-	{
-		m_circle.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
-	}
-	else
-	{
-		m_circle2.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
-	}
+	
 
+
+
+		if (myClient.Identify == "1")
+		{
+			m_circle.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
+		}
+		else
+		{
+			m_circle2.setPosition(std::stof(data.at(0)), std::stof(data.at(1)));
+
+		}
+	
 	if (!gameOver && m_circle.getGlobalBounds().intersects(m_circle2.getGlobalBounds()))
 	{
 		gameOver = true;
-		goodMorning.setString("Yellow Survived for " + std::to_string(timer.getElapsedTime().asSeconds()) + "seconds!");
+		goodMorning.setString("Yellow Lost got tagged rip ");
 
 	}
 	if (gameOver)
@@ -163,11 +175,11 @@ void game::setupShapes()
 {
 	m_circle.setFillColor(sf::Color::Red);
 	m_circle.setRadius(30.0f);
-	m_circle.setPosition(400.0f, 300.0f);
+	m_circle.setPosition(1000, 400.0f);
 
 	m_circle2.setFillColor(sf::Color::Yellow);
 	m_circle2.setRadius(30.0f);
-	m_circle2.setPosition(200.0f, 150.0f);
+	m_circle2.setPosition(400.0f, 400.0f);
 	
 	evening.loadFromFile("C:/Windows/Fonts/comic.ttf");
 	goodMorning.setFont(evening);
@@ -179,30 +191,58 @@ void game::setupShapes()
 void game::returnPos()
 {
 	std::string s;
+	if (start == false)
+	{
+		returnY1();
+		start = true;
+	}
+	else
+	{
+		s += std::to_string(static_cast<int>(m_circle.getPosition().x));
+		s += ",";
+		s += std::to_string(static_cast<int>(m_circle.getPosition().y));
 
-	s += std::to_string(static_cast<int>(m_circle.getPosition().x));
-	s += ",";
-	s += std::to_string(static_cast<int>(m_circle.getPosition().y));
-
-	myClient.SendString(s);
+		myClient.SendString(s);
+	}
 }
 void game::returnPos2()
 {
 	std::string s;
+	if (start == false)
+	{
+		returnY2();
+		start = true;
+	}
+	else
+	{
+		s += std::to_string(static_cast<int>(m_circle2.getPosition().x));
+		s += ",";
+		s += std::to_string(static_cast<int>(m_circle2.getPosition().y));
 
-	s += std::to_string(static_cast<int>(m_circle2.getPosition().x));
-	s += ",";
-	s += std::to_string(static_cast<int>(m_circle2.getPosition().y));
-
-	myClient.SendString(s);
+		myClient.SendString(s);
+	}
 }
 void game::returnY1()
 {
-	myClient.SendString(std::to_string(m_circle.getPosition().y));
+
+	std::string s;
+
+	s += "1000";
+	s += ",";
+	s += "400";
+
+	myClient.SendString(s);
 }
 void game::returnY2()
 {
-	myClient.SendString(std::to_string(m_circle2.getPosition().y));
+
+	std::string s;
+
+	s += "400";
+	s += ",";
+	s += "400";
+
+	myClient.SendString(s);
 }
 std::vector<std::string> game::splitString(const std::string& s, char delimiter)
 {
